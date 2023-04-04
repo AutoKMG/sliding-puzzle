@@ -47,6 +47,15 @@ public class PuzzleState implements Cloneable {
         this.positions = deepClone(positions);
     }
 
+    public boolean isGoal(){
+        return haveSomePositions(RED_SHOE, BLUE_SHOE);
+    }
+
+    public boolean canMove(Direction direction){
+
+    }
+
+
     private void checkPositions(Position[] positions){
         if (positions.length != 4){
             throw new IllegalArgumentException();
@@ -65,6 +74,10 @@ public class PuzzleState implements Cloneable {
                 & 0 <= position.col() && position.col() < BOARD_SIZE;
     }
 
+
+    private boolean haveSomePositions(int i, int j){
+        return positions[i].equals(positions[j]);
+    }
     private Position[] deepClone(Position[] positions){
         Position[] copy = positions.clone();
         for (var i = 0; i < positions.length; i++){
@@ -86,6 +99,17 @@ public class PuzzleState implements Cloneable {
         return Arrays.hashCode(positions);
     }
 
+    @Override
+    public PuzzleState clone(){
+        PuzzleState copy = null;
+        try {
+            copy = (PuzzleState) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // Never happens
+        }
+        copy.positions = deepClone(positions);
+        return copy;
+    }
     @Override
     public String toString(){
         var sj = new StringJoiner(",", "[", "]");
