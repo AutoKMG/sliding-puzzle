@@ -1,12 +1,13 @@
 package puzzle.state;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringJoiner;
 
 /**
  * Represents the state of the puzzle.
  */
-public class PuzzleState {
+public class PuzzleState implements Cloneable {
 
     /**
      * The size of the board.
@@ -73,11 +74,29 @@ public class PuzzleState {
     }
 
     @Override
+    public boolean equals(Object o){
+        if (o == null){
+            return false;
+        }
+        return (o instanceof PuzzleState other) && Arrays.deepEquals(positions, other.positions);
+    }
+
+    @Override
+    public int hashCode(){
+        return Arrays.hashCode(positions);
+    }
+
+    @Override
     public String toString(){
         var sj = new StringJoiner(",", "[", "]");
         for (var position: positions){
             sj.add(position.toString());
         }
         return sj.toString();
+    }
+
+    public static void main(String[] args) {
+        var state = new PuzzleState();
+        System.out.println(state);
     }
 }
