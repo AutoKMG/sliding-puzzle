@@ -52,9 +52,26 @@ public class PuzzleState implements Cloneable {
     }
 
     public boolean canMove(Direction direction){
-
+        return switch (direction){
+            case UP -> canMoveUp();
+            case RIGHT -> canMoveRight();
+            case DOWN -> canMoveDown();
+            case LEFT -> canMoveLeft();
+        };
     }
 
+    private boolean canMoveUp(){
+        return false;
+    }
+    private boolean canMoveRight(){
+        return false;
+    }
+    private boolean canMoveDown(){
+        return false;
+    }
+    private boolean canMoveLeft(){
+        return false;
+    }
 
     private void checkPositions(Position[] positions){
         if (positions.length != 4){
