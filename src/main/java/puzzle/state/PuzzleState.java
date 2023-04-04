@@ -61,7 +61,7 @@ public class PuzzleState implements Cloneable {
     }
 
     private boolean canMoveUp(){
-        return false;
+        return positions[BLOCK].row() > 0 &&  isEmpty(positions[BLOCK].getUp());
     }
     private boolean canMoveRight(){
         return false;
@@ -94,6 +94,15 @@ public class PuzzleState implements Cloneable {
 
     private boolean haveSomePositions(int i, int j){
         return positions[i].equals(positions[j]);
+    }
+
+    private boolean isEmpty(Position position){
+        for (var p : positions){
+            if (p.equals(position)){
+                return false;
+            }
+        }
+        return true;
     }
     private Position[] deepClone(Position[] positions){
         Position[] copy = positions.clone();
