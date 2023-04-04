@@ -64,13 +64,28 @@ public class PuzzleState implements Cloneable {
         return positions[BLOCK].row() > 0 &&  isEmpty(positions[BLOCK].getUp());
     }
     private boolean canMoveRight(){
-        return false;
+        if (positions[BLOCK].col() == BOARD_SIZE - 1){
+            return false;
+        }
+        var right = positions[BLOCK].getRight();
+        return isEmpty(right) || (positions[BLACK_SHOE].equals(right) && haveSomePositions(BLOCK, BLUE_SHOE));
     }
     private boolean canMoveDown(){
-        return false;
+        if(positions[BLOCK].row() == BOARD_SIZE - 1){
+            return false;
+        }
+        var down = positions[BLOCK].getDown();
+        if (isEmpty(down)){
+            return true;
+        }
+        if (haveSomePositions(BLOCK, BLACK_SHOE) || positions[BLACK_SHOE].equals(down)){
+            return false;
+        }
+        return (positions[BLUE_SHOE].equals(down) || positions[RED_SHOE].equals(down)) && !haveSomePositions(BLOCK, BLUE_SHOE);
+
     }
     private boolean canMoveLeft(){
-        return false;
+        return positions[BLOCK].col() > 0 && isEmpty(positions[BLOCK].getLeft());
     }
 
     private void checkPositions(Position[] positions){
