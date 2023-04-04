@@ -48,7 +48,7 @@ public class PuzzleState implements Cloneable {
     }
 
     public boolean isGoal(){
-        return haveSomePositions(RED_SHOE, BLUE_SHOE);
+        return haveSamePositions(RED_SHOE, BLUE_SHOE);
     }
 
     public boolean canMove(Direction direction){
@@ -68,7 +68,7 @@ public class PuzzleState implements Cloneable {
             return false;
         }
         var right = positions[BLOCK].getRight();
-        return isEmpty(right) || (positions[BLACK_SHOE].equals(right) && haveSomePositions(BLOCK, BLUE_SHOE));
+        return isEmpty(right) || (positions[BLACK_SHOE].equals(right) && haveSamePositions(BLOCK, BLUE_SHOE));
     }
     private boolean canMoveDown(){
         if(positions[BLOCK].row() == BOARD_SIZE - 1){
@@ -78,10 +78,10 @@ public class PuzzleState implements Cloneable {
         if (isEmpty(down)){
             return true;
         }
-        if (haveSomePositions(BLOCK, BLACK_SHOE) || positions[BLACK_SHOE].equals(down)){
+        if (haveSamePositions(BLOCK, BLACK_SHOE) || positions[BLACK_SHOE].equals(down)){
             return false;
         }
-        return (positions[BLUE_SHOE].equals(down) || positions[RED_SHOE].equals(down)) && !haveSomePositions(BLOCK, BLUE_SHOE);
+        return (positions[BLUE_SHOE].equals(down) || positions[RED_SHOE].equals(down)) && !haveSamePositions(BLOCK, BLUE_SHOE);
 
     }
     private boolean canMoveLeft(){
@@ -101,13 +101,50 @@ public class PuzzleState implements Cloneable {
             throw new IllegalArgumentException();
         }
     }
+
+
+    public void move(Direction direction){
+        switch (direction){
+            case UP -> moveUp();
+            case RIGHT -> moveRight();
+            case DOWN -> moveDown();
+            case LEFT -> moveLeft();
+        }
+    }
+
+    private void moveUp() {
+        if (haveSamePositions(BLOCK, BLACK_SHOE)){
+            if (haveSamePositions(BLOCK, RED_SHOE)){
+                positions[RED_SHOE].setUp();
+            }
+        }
+        positions[BLOCK].setUp();
+    }
+    private void moveRight() {
+        move(Direction.RIGHT, RED_SHOE, BLUE_SHOE, BLACK_SHOE);
+    }
+    private void moveDown() {
+        move(Direction.DOWN, RED_SHOE, BLUE_SHOE, BLACK_SHOE);
+    }
+    private void moveLeft() {
+        move(Direction.LEFT, RED_SHOE, BLUE_SHOE);
+    }
+
+    private void move(Direction direction, int... shoes){
+        for (var i : shoes){
+            if (haveSamePositions(i, BLOCK)){
+                positions[i].setTo(direction);
+            }
+        }
+        positions[BLOCK].setTo(direction);
+    }
     private boolean isOnBoard(Position position){
         return 0 <= position.row() && position.row() < BOARD_SIZE
                 & 0 <= position.col() && position.col() < BOARD_SIZE;
     }
 
 
-    private boolean haveSomePositions(int i, int j){
+    private boolean haveSamePositions(int i, int j){
         return positions[i].equals(positions[j]);
     }
 
